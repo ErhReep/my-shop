@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title data-i18n="product_page_title">Товар</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<div id="header-container"></div>
+
+<div class="product-page">
+  <div class="product-left">
+    <div class="image-zoom-container">
+      <img id="product-image" />
+    </div>
+  </div>
+
+  <div class="product-right">
+    <h1 id="product-title"></h1>
+    <p id="product-category" class="category"></p>
+    <h2 id="product-price"></h2>
+    <p id="product-description"></p>
+
+    <div class="product-actions">
+      <button id="add-to-cart" class="btn-primary" data-i18n="add_to_cart">
+        Add to Cart
+      </button>
+      <button id="buy-now" class="btn-secondary" data-i18n="buy_now">
+        Buy Now
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="related-section">
+  <h2 data-i18n="related_products">Related Products</h2>
+  <div id="related-products" class="product-grid"></div>
+</div>
+
+<script src="/js/languages.js"></script>
+<script src="/js/header.js"></script>
+<script src="js/product.js"></script>
+</body>
+</html>

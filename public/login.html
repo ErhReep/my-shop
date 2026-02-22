@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title data-i18n="login_title">Login</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div id="header-container"></div>
+
+<h2 data-i18n="login_title">Login</h2>
+
+<input 
+  type="email" 
+  id="email" 
+  data-i18n-placeholder="email_placeholder" 
+  placeholder="Email"
+><br><br>
+
+<input 
+  type="password" 
+  id="password" 
+  data-i18n-placeholder="password_placeholder" 
+  placeholder="Password"
+><br><br>
+
+<button onclick="login()" data-i18n="login_button">Login</button>
+
+<script>
+async function login() {
+
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+
+  const res = await fetch("/api/login", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email, password })
+  });
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    alert(window.t?.login_error || data.message || "Login error");
+    return;
+  }
+
+  localStorage.setItem("token", data.token);
+  localStorage.setItem("user", JSON.stringify(data.user));
+
+  alert(window.t?.login_success || "Login success");
+
+  if (data.user.role === "admin") {
+    window.location.href = "/admin.html";
+  } else {
+    window.location.href = "/";
+  }
+}
+</script>
+
+<script src="/js/languages.js"></script>
+<script src="/js/header.js"></script>
+
+</body>
+</html>

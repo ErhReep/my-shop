@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title data-i18n="cart_title">Корзина</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div id="header-container"></div>
+
+<h1 data-i18n="cart_title">Корзина</h1>
+
+<div id="cart"></div>
+
+<div class="cart-summary">
+  <h2 id="total" data-i18n="cart_total">Итого: 0 $</h2>
+  <button class="checkout-btn" onclick="checkout()" data-i18n="checkout_button">
+    Оформить заказ
+  </button>
+</div>
+
+<script src="js/cart.js"></script>
+<script src="/js/languages.js"></script>
+<script src="/js/header.js"></script>
+
+</body>
+</html>

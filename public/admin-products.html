@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title data-i18n="manage_products">Управление товарами</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div id="header-container"></div>
+
+<div class="admin-products-container">
+  <h2 data-i18n="manage_products">Управление товарами</h2>
+
+  <div class="admin-toolbar">
+    <input type="text" id="searchInput" data-i18n-placeholder="search_by_name" placeholder="Поиск по названию...">
+    <select id="categoryFilter">
+      <option value="" data-i18n="all_categories">Все категории</option>
+      <option value="tables" data-i18n="tables">Столы</option>
+      <option value="chairs" data-i18n="chairs">Стулья</option>
+    </select>
+    <button onclick="loadProducts()" data-i18n="search_button">Найти</button>
+  </div>
+
+  <div class="admin-table-wrapper">
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th data-i18n="image">Image</th>
+          <th data-i18n="name">Name</th>
+          <th data-i18n="price">Price</th>
+          <th data-i18n="stock">Stock</th>
+          <th data-i18n="category">Category</th>
+          <th data-i18n="actions">Actions</th>
+        </tr>
+      </thead>
+      <tbody id="productsTable"></tbody>
+    </table>
+  </div>
+</div>
+
+<div class="modal" id="deleteModal">
+  <div class="modal-content">
+    <h3 data-i18n="delete_product">Удалить товар?</h3>
+    <p data-i18n="delete_warning">Это действие нельзя отменить.</p>
+    <button id="confirmDelete" data-i18n="delete_button">Удалить</button>
+    <button onclick="closeModal()" data-i18n="cancel_button">Отмена</button>
+  </div>
+</div>
+
+<script src="/js/admin-products.js"></script>
+<script src="/js/languages.js"></script>
+<script src="/js/header.js"></script>
+
+</body>
+</html>

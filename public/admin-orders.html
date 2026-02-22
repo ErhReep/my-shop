@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Управление заказами</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div id="header-container"></div>
+
+<h2>Все заказы</h2>
+
+<div id="orders"></div>
+
+<script>
+
+const token = localStorage.getItem("token");
+const user = JSON.parse(localStorage.getItem("user"));
+
+if (!token || !user || user.role !== "admin") {
+  alert("Нет доступа");
+  location.href = "/login.html";
+}
+
+async function loadOrders() {
+
+  try {
+
+    const res = await fetch("/api/orders", {
+      headers: { Authorization: "Bearer " + token }
+    });
+
+    if (!res.ok) throw new Error();
+
+    const orders = await res.json();
+    const container = document.getElementById("orders");
+    container.innerHTML = "";
+
+    if (orders.length === 0) {
+      container.innerHTML = "<p>Заказов пока нет</p>";
+      return;
+    }
+
+    orders.forEach(order => {
+
+      /* ✅ ИСПОЛЬЗУЕМ order.items */
+      const itemsHtml = order.items.map(item => `
+        <li>
+          ${item.name} 
+          — ${item.quantity} шт.
+          — $${item.price}
+        </li>
+      `).join("");
+
+      const div = document.createElement("div");
+      div.className = "order-card";
+
+      div.innerHTML = `
+        <h3>Заказ #${order._id}</h3>
+
+        <p><strong>Дата:</strong> ${new Date(order.createdAt).toLocaleString()}</p>
+
+        <h4>Данные клиента:</h4>
+        <p><strong>Имя / Компания:</strong> ${order.customerName || "-"}</p>
+        <p><strong>Email:</strong> ${order.email || "-"}</p>
+        <p><strong>Телефон:</strong> ${order.phone || "-"}</p>
+        <p><strong>Компания:</strong> ${order.company || "-"}</p>
+        <p><strong>Адрес доставки:</strong> ${order.address || "-"}</p>
+        <p><strong>Комментарий:</strong> ${order.comment || "-"}</p>
+
+        <h4>Товары:</h4>
+        <ul>
+          ${itemsHtml}
+        </ul>
+
+        <p><strong>Сумма:</strong> $${order.totalPrice}</p>
+        <p><strong>Статус:</strong> ${order.status}</p>
+
+        <select onchange="changeStatus('${order._id}', this.value)">
+          <option value="pending" ${order.status === "pending" ? "selected" : ""}>Ожидает</option>
+          <option value="paid" ${order.status === "paid" ? "selected" : ""}>Оплачен</option>
+          <option value="shipped" ${order.status === "shipped" ? "selected" : ""}>Отправлен</option>
+          <option value="completed" ${order.status === "completed" ? "selected" : ""}>Завершён</option>
+        </select>
+
+        <hr>
+      `;
+
+      container.appendChild(div);
+    });
+
+  } catch (err) {
+    console.error(err);
+    alert("Ошибка загрузки заказов");
+  }
+}
+
+async function changeStatus(id, status) {
+
+  try {
+
+    const res = await fetch(`/api/orders/${id}/status`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token
+      },
+      body: JSON.stringify({ status })
+    });
+
+    if (!res.ok) throw new Error();
+
+    loadOrders();
+
+  } catch (err) {
+    console.error(err);
+    alert("Ошибка изменения статуса");
+  }
+}
+
+loadOrders();
+
+</script>
+
+<script src="/js/languages.js"></script>
+<script src="/js/header.js"></script>
+
+
+</body>
+</html>

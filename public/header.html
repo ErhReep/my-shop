@@ -1,0 +1,41 @@
+<header class="main-header">
+  <div class="header-left">
+    <a href="/" class="logo" data-i18n="logo">MyShop</a>
+  </div>
+
+  <nav class="nav-links" id="navLinks">
+    <a href="/" data-i18n="catalog">Catalog</a>
+
+    <a href="/cart.html" class="cart-link">
+      🛒
+      <span id="cart-count" class="cart-count">0</span>
+    </a>
+
+    <a href="/admin.html" id="admin-link" class="admin-link" style="display:none;" data-i18n="admin">
+      Admin
+    </a>
+
+    <a href="/login.html" id="login-link" class="btn-login" data-i18n="login">
+      Login
+    </a>
+
+    <div class="profile" id="profileMenu" style="display:none;">
+      <span id="profileName"></span>
+      <div class="profile-dropdown">
+        <a href="/orders.html" data-i18n="myOrders">My Orders</a>
+        <a href="#" id="logout-link" data-i18n="logout">Logout</a>
+      </div>
+    </div>
+
+    <!-- LANGUAGE SWITCHER -->
+    <select id="language-switcher" class="language-switcher">
+      <option value="cs">CZ</option>
+      <option value="uk">UA</option>  <!-- FIXED -->
+      <option value="ru">RU</option>
+      <option value="en">EN</option>
+    </select>
+  </nav>
+
+  <!-- MOBILE BURGER -->
+  <div class="burger" id="burger">☰</div>
+</header>
