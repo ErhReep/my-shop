@@ -91,7 +91,9 @@ color:white !important;
 font-weight:600;
 }
 
-.btn-login:hover
+.btn-login:hover{
+background:darkred;
+}
 
 /* PROFILE */
 

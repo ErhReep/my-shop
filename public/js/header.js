@@ -9,7 +9,12 @@ document.addEventListener("DOMContentLoaded", () => {
 async function loadHeader() {
   try {
 
-    const res = await fetch("/header.html");
+    const res = await fetch("header.html");
+
+    if (!res.ok) {
+      throw new Error("Header not found");
+    }
+
     const html = await res.text();
 
     const container = document.getElementById("header-container");
@@ -17,12 +22,9 @@ async function loadHeader() {
 
     container.innerHTML = html;
 
-    /* Ждём пока header появится в DOM */
-    setTimeout(() => {
-      initHeader();
-      initLanguage();
-      updateCartCount();
-    }, 0);
+    initHeader();
+    initLanguage();
+    updateCartCount();
 
   } catch (err) {
     console.error("Header load error:", err);
@@ -71,13 +73,13 @@ function initHeader() {
     }
 
     if (user.role === "admin" && adminLink) {
-      adminLink.style.display = "inline";
+      adminLink.style.display = "inline-block";
     }
 
   } else {
 
-    if (loginLink) loginLink.style.display = "inline";
-    if (registerLink) registerLink.style.display = "inline";
+    if (loginLink) loginLink.style.display = "inline-block";
+    if (registerLink) registerLink.style.display = "inline-block";
 
     if (profileMenu) profileMenu.style.display = "none";
     if (adminLink) adminLink.style.display = "none";
@@ -93,7 +95,6 @@ function initHeader() {
     profileName.addEventListener("click", (e) => {
 
       e.stopPropagation();
-
       profileDropdown.classList.toggle("open");
 
     });

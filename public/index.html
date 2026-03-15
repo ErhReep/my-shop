@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
@@ -8,64 +9,77 @@
 <body>
 
   <!-- HEADER (DYNAMIC) -->
+
   <div id="header-container"></div>
 
   <!-- MAIN TITLE -->
+
   <h1 data-i18n="mainTitle">MY SHOP</h1>
 
   <!-- FILTERS -->
+
   <div class="filters">
 
-    <!-- CATEGORY -->
-    <select id="categorySelect">
-      <option value="" data-i18n="allCategories">All Categories</option>
-      <option value="tables" data-i18n="tables">Tables</option>
-      <option value="chairs" data-i18n="chairs">Chairs</option>
-    </select>
+```
+<!-- CATEGORY -->
+<select id="categorySelect">
+  <option value="" data-i18n="allCategories">All Categories</option>
+  <option value="tables" data-i18n="tables">Tables</option>
+  <option value="chairs" data-i18n="chairs">Chairs</option>
+</select>
 
-    <!-- SEARCH -->
-    <input 
-      type="text" 
-      id="searchInput" 
-      data-i18n-placeholder="searchPlaceholder"
-      placeholder="Search by name"
-    >
+<!-- SEARCH -->
+<input 
+  type="text" 
+  id="searchInput" 
+  data-i18n-placeholder="searchPlaceholder"
+  placeholder="Search by name"
+>
 
-    <!-- SORT -->
-    <select id="sortSelect">
-      <option value="" data-i18n="sorting">Sorting</option>
-      <option value="price_asc" data-i18n="priceAsc">Price ↑</option>
-      <option value="price_desc" data-i18n="priceDesc">Price ↓</option>
-      <option value="newest" data-i18n="newest">Newest</option>
-    </select>
+<!-- SORT -->
+<select id="sortSelect">
+  <option value="" data-i18n="sorting">Sorting</option>
+  <option value="price_asc" data-i18n="priceAsc">Price ↑</option>
+  <option value="price_desc" data-i18n="priceDesc">Price ↓</option>
+  <option value="newest" data-i18n="newest">Newest</option>
+</select>
 
-    <button onclick="loadProducts()" data-i18n="apply">Apply</button>
+<button onclick="loadProducts()" data-i18n="apply">Apply</button>
+```
 
   </div>
 
   <hr>
 
   <!-- PRODUCTS -->
+
   <div id="products"></div>
 
   <!-- EDIT MODAL -->
+
   <div id="editModal" class="modal" style="display:none;">
     <div class="modal-content">
       <h2 data-i18n="editProduct">Edit Product</h2>
 
-      <input id="editName" data-i18n-placeholder="name"><br><br>
-      <textarea id="editDescription" data-i18n-placeholder="description"></textarea><br><br>
-      <input id="editPrice" type="number" data-i18n-placeholder="price"><br><br>
+```
+  <input id="editName" data-i18n-placeholder="name"><br><br>
+  <textarea id="editDescription" data-i18n-placeholder="description"></textarea><br><br>
+  <input id="editPrice" type="number" data-i18n-placeholder="price"><br><br>
 
-      <button onclick="saveEdit()" data-i18n="save">Save</button>
-      <button onclick="closeModal()" data-i18n="cancel">Cancel</button>
-    </div>
+  <button onclick="saveEdit()" data-i18n="save">Save</button>
+  <button onclick="closeModal()" data-i18n="cancel">Cancel</button>
+</div>
+```
+
   </div>
 
-  <!-- LANG + HEADER + APP -->
-  <script src="/js/languages.js"></script>
-  <script src="/js/header.js"></script>
-  <script src="/js/app.js"></script>
+  <!-- SCRIPTS -->
+
+  <script src="js/languages.js"></script>
+
+  <script src="js/header.js"></script>
+
+  <script src="js/app.js"></script>
 
 </body>
 </html>
