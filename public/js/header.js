@@ -3,28 +3,30 @@ LOAD HEADER
 ========================= */
 
 document.addEventListener("DOMContentLoaded", () => {
-loadHeader();
+  loadHeader();
 });
 
 async function loadHeader() {
-try {
+  try {
 
-```
-const res = await fetch("/header.html");
-const html = await res.text();
+    const res = await fetch("/header.html");
+    const html = await res.text();
 
-const container = document.getElementById("header-container");
-if (!container) return;
+    const container = document.getElementById("header-container");
+    if (!container) return;
 
-container.innerHTML = html;
+    container.innerHTML = html;
 
-initHeader();
-initLanguage();
-```
+    /* Ждём пока header появится в DOM */
+    setTimeout(() => {
+      initHeader();
+      initLanguage();
+      updateCartCount();
+    }, 0);
 
-} catch (err) {
-console.error("Header load error:", err);
-}
+  } catch (err) {
+    console.error("Header load error:", err);
+  }
 }
 
 /* =========================
@@ -33,123 +35,108 @@ INIT HEADER
 
 function initHeader() {
 
-updateCartCount();
+  const token = localStorage.getItem("token");
 
-const token = localStorage.getItem("token");
+  let user = null;
 
-let user = null;
-try {
-user = JSON.parse(localStorage.getItem("user"));
-} catch {
-user = null;
-}
+  try {
+    user = JSON.parse(localStorage.getItem("user"));
+  } catch {
+    user = null;
+  }
 
-const loginLink = document.getElementById("login-link");
-const registerLink = document.getElementById("register-link");
-const logoutLink = document.getElementById("logout-link");
-const adminLink = document.getElementById("admin-link");
+  const loginLink = document.getElementById("login-link");
+  const registerLink = document.getElementById("register-link");
+  const logoutLink = document.getElementById("logout-link");
+  const adminLink = document.getElementById("admin-link");
 
-const profileMenu = document.getElementById("profileMenu");
-const profileName = document.getElementById("profileName");
-const profileDropdown = document.getElementById("profileDropdown");
+  const profileMenu = document.getElementById("profileMenu");
+  const profileName = document.getElementById("profileName");
+  const profileDropdown = document.getElementById("profileDropdown");
 
-/* ===== AUTH UI ===== */
+  /* ===== AUTH UI ===== */
 
-if (token && user) {
+  if (token && user) {
 
-```
-if (loginLink) loginLink.style.display = "none";
-if (registerLink) registerLink.style.display = "none";
+    if (loginLink) loginLink.style.display = "none";
+    if (registerLink) registerLink.style.display = "none";
 
-if (profileMenu) profileMenu.style.display = "flex";
+    if (profileMenu) profileMenu.style.display = "flex";
 
-if (profileName) {
-  profileName.innerText =
-    user.email ||
-    user.username ||
-    "User";
-}
+    if (profileName) {
+      profileName.innerText =
+        user.email ||
+        user.username ||
+        "User";
+    }
 
-if (user.role === "admin" && adminLink) {
-  adminLink.style.display = "inline";
-}
-```
+    if (user.role === "admin" && adminLink) {
+      adminLink.style.display = "inline";
+    }
 
-} else {
+  } else {
 
-```
-if (loginLink) loginLink.style.display = "inline";
-if (registerLink) registerLink.style.display = "inline";
+    if (loginLink) loginLink.style.display = "inline";
+    if (registerLink) registerLink.style.display = "inline";
 
-if (profileMenu) profileMenu.style.display = "none";
-if (adminLink) adminLink.style.display = "none";
-```
-
-}
-
-/* =========================
-PROFILE DROPDOWN
-========================= */
-
-if (profileName && profileDropdown && profileMenu) {
-
-```
-profileName.addEventListener("click", (e) => {
-
-  e.stopPropagation();
-
-  profileDropdown.classList.toggle("open");
-
-});
-
-document.addEventListener("click", (e) => {
-
-  if (!profileMenu.contains(e.target)) {
-
-    profileDropdown.classList.remove("open");
+    if (profileMenu) profileMenu.style.display = "none";
+    if (adminLink) adminLink.style.display = "none";
 
   }
 
-});
-```
+  /* =========================
+  PROFILE DROPDOWN
+  ========================= */
 
-}
+  if (profileName && profileDropdown && profileMenu) {
 
-/* ===== LOGOUT ===== */
+    profileName.addEventListener("click", (e) => {
 
-if (logoutLink) {
+      e.stopPropagation();
 
-```
-logoutLink.addEventListener("click", (e) => {
+      profileDropdown.classList.toggle("open");
 
-  e.preventDefault();
+    });
 
-  localStorage.removeItem("token");
-  localStorage.removeItem("user");
+    document.addEventListener("click", (e) => {
 
-  window.location.reload();
+      if (!profileMenu.contains(e.target)) {
+        profileDropdown.classList.remove("open");
+      }
 
-});
-```
+    });
 
-}
+  }
 
-/* ===== BURGER MENU ===== */
+  /* ===== LOGOUT ===== */
 
-const burger = document.getElementById("burger");
-const navLinks = document.getElementById("navLinks");
+  if (logoutLink) {
 
-if (burger && navLinks) {
+    logoutLink.addEventListener("click", (e) => {
 
-```
-burger.addEventListener("click", () => {
+      e.preventDefault();
 
-  navLinks.classList.toggle("active");
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
 
-});
-```
+      window.location.reload();
 
-}
+    });
+
+  }
+
+  /* ===== BURGER MENU ===== */
+
+  const burger = document.getElementById("burger");
+  const navLinks = document.getElementById("navLinks");
+
+  if (burger && navLinks) {
+
+    burger.addEventListener("click", () => {
+      navLinks.classList.toggle("active");
+    });
+
+  }
 
 }
 
@@ -159,30 +146,28 @@ LANGUAGE SYSTEM
 
 function initLanguage() {
 
-const languageSwitcher = document.getElementById("language-switcher");
-if (!languageSwitcher) return;
+  const languageSwitcher = document.getElementById("language-switcher");
+  if (!languageSwitcher) return;
 
-const savedLang = localStorage.getItem("lang") || "cs";
+  const savedLang = localStorage.getItem("lang") || "cs";
 
-languageSwitcher.value = savedLang;
+  languageSwitcher.value = savedLang;
 
-languageSwitcher.addEventListener("change", (e) => {
+  languageSwitcher.addEventListener("change", (e) => {
 
-```
-const selectedLang = e.target.value;
+    const selectedLang = e.target.value;
 
-localStorage.setItem("lang", selectedLang);
+    localStorage.setItem("lang", selectedLang);
 
-if (window.applyTranslations) {
-  window.applyTranslations(selectedLang);
-}
-```
+    if (window.applyTranslations) {
+      window.applyTranslations(selectedLang);
+    }
 
-});
+  });
 
-if (window.applyTranslations) {
-window.applyTranslations(savedLang);
-}
+  if (window.applyTranslations) {
+    window.applyTranslations(savedLang);
+  }
 
 }
 
@@ -192,25 +177,29 @@ CART COUNT
 
 function updateCartCount() {
 
-const cart = JSON.parse(localStorage.getItem("cart")) || [];
+  let cart = [];
 
-const totalQty = cart.reduce((sum, item) => {
-return sum + (item.qty || 1);
-}, 0);
+  try {
+    cart = JSON.parse(localStorage.getItem("cart")) || [];
+  } catch {
+    cart = [];
+  }
 
-const countEl = document.getElementById("cart-count");
+  const totalQty = cart.reduce((sum, item) => {
+    return sum + (item.qty || 1);
+  }, 0);
 
-if (countEl) {
+  const countEl = document.getElementById("cart-count");
 
-```
-countEl.innerText = totalQty;
+  if (countEl) {
 
-countEl.style.display =
-  totalQty > 0
-    ? "inline-block"
-    : "none";
-```
+    countEl.innerText = totalQty;
 
-}
+    countEl.style.display =
+      totalQty > 0
+        ? "inline-block"
+        : "none";
+
+  }
 
 }
