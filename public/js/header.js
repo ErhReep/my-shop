@@ -1,209 +1,216 @@
 /* =========================
-   LOAD HEADER
+LOAD HEADER
 ========================= */
 
 document.addEventListener("DOMContentLoaded", () => {
-  loadHeader();
+loadHeader();
 });
 
 async function loadHeader() {
+try {
 
-  try {
+```
+const res = await fetch("/header.html");
+const html = await res.text();
 
-    const res = await fetch("/header.html");
-    const html = await res.text();
+const container = document.getElementById("header-container");
+if (!container) return;
 
-    const container = document.getElementById("header-container");
+container.innerHTML = html;
 
-    if (!container) return;
+initHeader();
+initLanguage();
+```
 
-    container.innerHTML = html;
-
-    initHeader();
-    initLanguage();
-
-  } catch (err) {
-
-    console.error("Header load error:", err);
-
-  }
-
+} catch (err) {
+console.error("Header load error:", err);
+}
 }
 
 /* =========================
-   INIT HEADER
+INIT HEADER
 ========================= */
 
 function initHeader() {
 
-  updateCartCount();
+updateCartCount();
 
-  const token = localStorage.getItem("token");
-  const user = JSON.parse(localStorage.getItem("user"));
+const token = localStorage.getItem("token");
 
-  const loginLink = document.getElementById("login-link");
-  const registerLink = document.getElementById("register-link");
-  const logoutLink = document.getElementById("logout-link");
-  const adminLink = document.getElementById("admin-link");
+let user = null;
+try {
+user = JSON.parse(localStorage.getItem("user"));
+} catch {
+user = null;
+}
 
-  const profileMenu = document.getElementById("profileMenu");
-  const profileName = document.getElementById("profileName");
-  const profileDropdown = document.getElementById("profileDropdown");
+const loginLink = document.getElementById("login-link");
+const registerLink = document.getElementById("register-link");
+const logoutLink = document.getElementById("logout-link");
+const adminLink = document.getElementById("admin-link");
 
-  /* ===== AUTH UI ===== */
+const profileMenu = document.getElementById("profileMenu");
+const profileName = document.getElementById("profileName");
+const profileDropdown = document.getElementById("profileDropdown");
 
-  if (token && user) {
+/* ===== AUTH UI ===== */
 
-    if (loginLink) loginLink.style.display = "none";
-    if (registerLink) registerLink.style.display = "none";
+if (token && user) {
 
-    if (profileMenu) profileMenu.style.display = "flex";
+```
+if (loginLink) loginLink.style.display = "none";
+if (registerLink) registerLink.style.display = "none";
 
-    if (profileName) {
+if (profileMenu) profileMenu.style.display = "flex";
 
-      profileName.innerText =
-        user.email ||
-        user.username ||
-        "User";
+if (profileName) {
+  profileName.innerText =
+    user.email ||
+    user.username ||
+    "User";
+}
 
-    }
+if (user.role === "admin" && adminLink) {
+  adminLink.style.display = "inline";
+}
+```
 
-    if (user.role === "admin" && adminLink) {
+} else {
 
-      adminLink.style.display = "inline";
+```
+if (loginLink) loginLink.style.display = "inline";
+if (registerLink) registerLink.style.display = "inline";
 
-    }
-
-  } else {
-
-    if (loginLink) loginLink.style.display = "inline";
-    if (registerLink) registerLink.style.display = "inline";
-
-    if (profileMenu) profileMenu.style.display = "none";
-
-    if (adminLink) adminLink.style.display = "none";
-
-  }
-
-  /* =========================
-     PROFILE DROPDOWN FIX
-  ========================= */
-
-  if (profileName && profileDropdown) {
-
-    profileName.addEventListener("click", (e) => {
-
-      e.stopPropagation();
-
-      profileDropdown.classList.toggle("open");
-
-    });
-
-    document.addEventListener("click", (e) => {
-
-      if (!profileMenu.contains(e.target)) {
-
-        profileDropdown.classList.remove("open");
-
-      }
-
-    });
-
-  }
-
-  /* ===== LOGOUT ===== */
-
-  if (logoutLink) {
-
-    logoutLink.addEventListener("click", (e) => {
-
-      e.preventDefault();
-
-      localStorage.removeItem("token");
-      localStorage.removeItem("user");
-
-      window.location.reload();
-
-    });
-
-  }
-
-  /* ===== BURGER MENU ===== */
-
-  const burger = document.getElementById("burger");
-  const navLinks = document.getElementById("navLinks");
-
-  if (burger && navLinks) {
-
-    burger.addEventListener("click", () => {
-
-      navLinks.classList.toggle("active");
-
-    });
-
-  }
+if (profileMenu) profileMenu.style.display = "none";
+if (adminLink) adminLink.style.display = "none";
+```
 
 }
 
 /* =========================
-   LANGUAGE SYSTEM
+PROFILE DROPDOWN
+========================= */
+
+if (profileName && profileDropdown && profileMenu) {
+
+```
+profileName.addEventListener("click", (e) => {
+
+  e.stopPropagation();
+
+  profileDropdown.classList.toggle("open");
+
+});
+
+document.addEventListener("click", (e) => {
+
+  if (!profileMenu.contains(e.target)) {
+
+    profileDropdown.classList.remove("open");
+
+  }
+
+});
+```
+
+}
+
+/* ===== LOGOUT ===== */
+
+if (logoutLink) {
+
+```
+logoutLink.addEventListener("click", (e) => {
+
+  e.preventDefault();
+
+  localStorage.removeItem("token");
+  localStorage.removeItem("user");
+
+  window.location.reload();
+
+});
+```
+
+}
+
+/* ===== BURGER MENU ===== */
+
+const burger = document.getElementById("burger");
+const navLinks = document.getElementById("navLinks");
+
+if (burger && navLinks) {
+
+```
+burger.addEventListener("click", () => {
+
+  navLinks.classList.toggle("active");
+
+});
+```
+
+}
+
+}
+
+/* =========================
+LANGUAGE SYSTEM
 ========================= */
 
 function initLanguage() {
 
-  const languageSwitcher = document.getElementById("language-switcher");
+const languageSwitcher = document.getElementById("language-switcher");
+if (!languageSwitcher) return;
 
-  if (!languageSwitcher) return;
+const savedLang = localStorage.getItem("lang") || "cs";
 
-  const savedLang = localStorage.getItem("lang") || "cs";
+languageSwitcher.value = savedLang;
 
-  languageSwitcher.value = savedLang;
+languageSwitcher.addEventListener("change", (e) => {
 
-  languageSwitcher.addEventListener("change", (e) => {
+```
+const selectedLang = e.target.value;
 
-    const selectedLang = e.target.value;
+localStorage.setItem("lang", selectedLang);
 
-    localStorage.setItem("lang", selectedLang);
+if (window.applyTranslations) {
+  window.applyTranslations(selectedLang);
+}
+```
 
-    if (window.applyTranslations) {
-      window.applyTranslations(selectedLang);
-    }
+});
 
-  });
-
-  if (window.applyTranslations) {
-    window.applyTranslations(savedLang);
-  }
+if (window.applyTranslations) {
+window.applyTranslations(savedLang);
+}
 
 }
 
 /* =========================
-   CART COUNT
+CART COUNT
 ========================= */
 
 function updateCartCount() {
 
-  const cart = JSON.parse(localStorage.getItem("cart")) || [];
+const cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-  let totalQty = 0;
+const totalQty = cart.reduce((sum, item) => {
+return sum + (item.qty || 1);
+}, 0);
 
-  cart.forEach(item => {
+const countEl = document.getElementById("cart-count");
 
-    totalQty += item.qty || 1;
+if (countEl) {
 
-  });
+```
+countEl.innerText = totalQty;
 
-  const countEl = document.getElementById("cart-count");
+countEl.style.display =
+  totalQty > 0
+    ? "inline-block"
+    : "none";
+```
 
-  if (countEl) {
-
-    countEl.innerText = totalQty;
-
-    countEl.style.display =
-      totalQty > 0
-        ? "inline-block"
-        : "none";
-
-  }
+}
 
 }
