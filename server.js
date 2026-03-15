@@ -24,21 +24,37 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
 app.use("/images", express.static(path.join(__dirname, "public/images")));
 
-
 /* =========================
-   MONGODB CONNECT
+   MONGODB CONNECT (FIXED)
 ========================= */
 
-mongoose.connect(process.env.MONGO_URI)
-.then(() => {
-  console.log("✅ MongoDB подключена");
-  console.log("📌 Database:", mongoose.connection.name);
-})
-.catch(err => {
-  console.log("❌ MongoDB ошибка:");
-  console.log(err);
-});
+async function startServer() {
+  try {
+    if (!process.env.MONGO_URI) {
+      throw new Error("MONGO_URI not defined");
+    }
 
+    await mongoose.connect(process.env.MONGO_URI, {
+      serverSelectionTimeoutMS: 5000
+    });
+
+    console.log("✅ MongoDB подключена");
+    console.log("📌 Database:", mongoose.connection.name);
+
+    const PORT = process.env.PORT || 10000;
+
+    app.listen(PORT, () => {
+      console.log("🚀 Server started on port " + PORT);
+    });
+
+  } catch (err) {
+    console.error("❌ MongoDB CONNECTION ERROR:");
+    console.error(err.message);
+    process.exit(1);
+  }
+}
+
+startServer();
 
 /* =========================
    REGISTER
@@ -46,7 +62,6 @@ mongoose.connect(process.env.MONGO_URI)
 
 app.post("/api/register", async (req, res) => {
   try {
-
     const { email, password } = req.body;
 
     if (!email || !password) {
@@ -54,7 +69,6 @@ app.post("/api/register", async (req, res) => {
     }
 
     const exist = await User.findOne({ email });
-
     if (exist) {
       return res.status(400).json({ message: "Email уже существует" });
     }
@@ -77,15 +91,10 @@ app.post("/api/register", async (req, res) => {
     });
 
   } catch (err) {
-
     console.log("REGISTER ERROR:", err);
-
-    res.status(500).json({
-      message: "Server error"
-    });
+    res.status(500).json({ message: "Server error" });
   }
 });
-
 
 /* =========================
    LOGIN
@@ -93,7 +102,6 @@ app.post("/api/register", async (req, res) => {
 
 app.post("/api/login", async (req, res) => {
   try {
-
     const { email, password } = req.body;
 
     if (!email || !password) {
@@ -112,15 +120,17 @@ app.post("/api/login", async (req, res) => {
       return res.status(400).json({ message: "Неверный пароль" });
     }
 
+    if (!process.env.JWT_SECRET) {
+      throw new Error("JWT_SECRET not defined");
+    }
+
     const token = jwt.sign(
       {
         id: user._id,
         role: user.role
       },
       process.env.JWT_SECRET,
-      {
-        expiresIn: "7d"
-      }
+      { expiresIn: "7d" }
     );
 
     res.json({
@@ -134,15 +144,10 @@ app.post("/api/login", async (req, res) => {
     });
 
   } catch (err) {
-
     console.log("LOGIN ERROR:", err);
-
-    res.status(500).json({
-      message: "Server error"
-    });
+    res.status(500).json({ message: "Server error" });
   }
 });
-
 
 /* =========================
    ROUTES
@@ -151,22 +156,10 @@ app.post("/api/login", async (req, res) => {
 app.use("/api/products", productRoutes);
 app.use("/api/orders", orderRoutes);
 
-
 /* =========================
    SAFE FALLBACK
 ========================= */
 
-app.use((req, res) => {
+app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "public/index.html"));
-});
-
-
-/* =========================
-   START SERVER
-========================= */
-
-const PORT = process.env.PORT || 5000;
-
-app.listen(PORT, () => {
-  console.log("🚀 Server started on port " + PORT);
 });

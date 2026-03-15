@@ -35,6 +35,7 @@ function initHeader() {
   const user = JSON.parse(localStorage.getItem("user"));
 
   const loginLink = document.getElementById("login-link");
+  const registerLink = document.getElementById("register-link"); // NEW
   const logoutLink = document.getElementById("logout-link");
   const adminLink = document.getElementById("admin-link");
   const profileMenu = document.getElementById("profileMenu");
@@ -45,6 +46,7 @@ function initHeader() {
   if (token && user) {
 
     if (loginLink) loginLink.style.display = "none";
+    if (registerLink) registerLink.style.display = "none"; // NEW
     if (profileMenu) profileMenu.style.display = "block";
 
     if (profileName) {
@@ -58,6 +60,7 @@ function initHeader() {
   } else {
 
     if (loginLink) loginLink.style.display = "inline";
+    if (registerLink) registerLink.style.display = "inline"; // NEW
     if (profileMenu) profileMenu.style.display = "none";
     if (adminLink) adminLink.style.display = "none";
   }
@@ -100,8 +103,8 @@ function initLanguage() {
 
   languageSwitcher.value = savedLang;
 
-  // При смене языка
   languageSwitcher.addEventListener("change", (e) => {
+
     const selectedLang = e.target.value;
 
     localStorage.setItem("lang", selectedLang);
@@ -109,9 +112,9 @@ function initLanguage() {
     if (window.applyTranslations) {
       window.applyTranslations(selectedLang);
     }
+
   });
 
-  // Применяем язык после загрузки header
   if (window.applyTranslations) {
     window.applyTranslations(savedLang);
   }
