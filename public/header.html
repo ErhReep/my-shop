@@ -1,9 +1,11 @@
 <header class="main-header">
+
   <div class="header-left">
     <a href="/" class="logo" data-i18n="logo">MyShop</a>
   </div>
 
   <nav class="nav-links" id="navLinks">
+
     <a href="/" data-i18n="catalog">Catalog</a>
 
     <a href="/cart.html" class="cart-link">
@@ -11,38 +13,62 @@
       <span id="cart-count" class="cart-count">0</span>
     </a>
 
-    <a href="/admin.html" id="admin-link" class="admin-link" style="display:none;" data-i18n="admin">
+    <a href="/admin.html"
+       id="admin-link"
+       class="admin-link"
+       style="display:none;"
+       data-i18n="admin">
       Admin
     </a>
 
     <!-- LOGIN -->
-    <a href="/login.html" id="login-link" class="btn-login" data-i18n="login">
+    <a href="/login.html"
+       id="login-link"
+       class="btn-login"
+       data-i18n="login">
       Login
     </a>
 
-    <!-- REGISTER (ДОБАВИЛИ) -->
-    <a href="/register.html" id="register-link" class="btn-register" data-i18n="register">
+    <!-- REGISTER -->
+    <a href="/register.html"
+       id="register-link"
+       class="btn-register"
+       data-i18n="register">
       Register
     </a>
 
     <!-- PROFILE -->
     <div class="profile" id="profileMenu" style="display:none;">
+
       <span id="profileName"></span>
+
       <div class="profile-dropdown">
-        <a href="/orders.html" data-i18n="myOrders">My Orders</a>
-        <a href="#" id="logout-link" data-i18n="logout">Logout</a>
+
+        <a href="/orders.html" data-i18n="myOrders">
+          My Orders
+        </a>
+
+        <a href="#" id="logout-link" data-i18n="logout">
+          Logout
+        </a>
+
       </div>
+
     </div>
 
-    <!-- LANGUAGE SWITCHER -->
+    <!-- LANGUAGE -->
     <select id="language-switcher" class="language-switcher">
       <option value="cs">CZ</option>
       <option value="uk">UA</option>
       <option value="ru">RU</option>
       <option value="en">EN</option>
     </select>
+
   </nav>
 
   <!-- MOBILE BURGER -->
-  <div class="burger" id="burger">☰</div>
+  <div class="burger" id="burger">
+    ☰
+  </div>
+
 </header>
