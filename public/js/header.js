@@ -48,6 +48,7 @@ function initHeader() {
 
   const profileMenu = document.getElementById("profileMenu");
   const profileName = document.getElementById("profileName");
+  const profileDropdown = document.getElementById("profileDropdown");
 
   /* ===== AUTH UI ===== */
 
@@ -81,6 +82,32 @@ function initHeader() {
     if (profileMenu) profileMenu.style.display = "none";
 
     if (adminLink) adminLink.style.display = "none";
+
+  }
+
+  /* =========================
+     PROFILE DROPDOWN FIX
+  ========================= */
+
+  if (profileName && profileDropdown) {
+
+    profileName.addEventListener("click", (e) => {
+
+      e.stopPropagation();
+
+      profileDropdown.classList.toggle("open");
+
+    });
+
+    document.addEventListener("click", (e) => {
+
+      if (!profileMenu.contains(e.target)) {
+
+        profileDropdown.classList.remove("open");
+
+      }
+
+    });
 
   }
 
