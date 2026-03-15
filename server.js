@@ -25,18 +25,17 @@ app.use(express.static("public"));
 app.use("/images", express.static(path.join(__dirname, "public/images")));
 
 /* =========================
-   MONGODB CONNECT (FIXED)
+   MONGODB CONNECT
 ========================= */
 
 async function startServer() {
   try {
+
     if (!process.env.MONGO_URI) {
       throw new Error("MONGO_URI not defined");
     }
 
-    await mongoose.connect(process.env.MONGO_URI, {
-      serverSelectionTimeoutMS: 5000
-    });
+    await mongoose.connect(process.env.MONGO_URI);
 
     console.log("✅ MongoDB подключена");
     console.log("📌 Database:", mongoose.connection.name);
@@ -48,8 +47,10 @@ async function startServer() {
     });
 
   } catch (err) {
-    console.error("❌ MongoDB CONNECTION ERROR:");
-    console.error(err.message);
+
+    console.error("❌ MongoDB CONNECTION ERROR");
+    console.error(err);
+
     process.exit(1);
   }
 }
@@ -61,7 +62,9 @@ startServer();
 ========================= */
 
 app.post("/api/register", async (req, res) => {
+
   try {
+
     const { email, password } = req.body;
 
     if (!email || !password) {
@@ -69,6 +72,7 @@ app.post("/api/register", async (req, res) => {
     }
 
     const exist = await User.findOne({ email });
+
     if (exist) {
       return res.status(400).json({ message: "Email уже существует" });
     }
@@ -91,8 +95,12 @@ app.post("/api/register", async (req, res) => {
     });
 
   } catch (err) {
+
     console.log("REGISTER ERROR:", err);
-    res.status(500).json({ message: "Server error" });
+
+    res.status(500).json({
+      message: "Server error"
+    });
   }
 });
 
@@ -101,7 +109,9 @@ app.post("/api/register", async (req, res) => {
 ========================= */
 
 app.post("/api/login", async (req, res) => {
+
   try {
+
     const { email, password } = req.body;
 
     if (!email || !password) {
@@ -144,8 +154,12 @@ app.post("/api/login", async (req, res) => {
     });
 
   } catch (err) {
+
     console.log("LOGIN ERROR:", err);
-    res.status(500).json({ message: "Server error" });
+
+    res.status(500).json({
+      message: "Server error"
+    });
   }
 });
 
@@ -160,6 +174,6 @@ app.use("/api/orders", orderRoutes);
    SAFE FALLBACK
 ========================= */
 
-app.get("*", (req, res) => {
+app.use((req, res) => {
   res.sendFile(path.join(__dirname, "public/index.html"));
 });
